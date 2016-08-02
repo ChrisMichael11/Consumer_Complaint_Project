@@ -1,19 +1,24 @@
 # Consumer_Complaint_Project
 ### Consumer Complaint Project - Capstone Project for Galvanize Data Science Immersive May 2016
 
-![picture](img/)
+![picture](img/Problem_solving.jpg)
+
+Image courtesy of: http://www.ris.world/sites/default/files/problem-solving-icon-M115584.jpg
 
 ## Introduction
-
-
-
+Customer service is an important part of any business.  In current conditions,
 
 ## Objective
 The goal of this project is to determine if the text provided describing a complaint can predict the outcome of that complaint.  This can be extremely useful to an organization so that they understand ....
+![picture](img/Complaints_down.png)
 
+Image courtesy of:
+http://www.gimconsultancy.com/images/course/146760856426786695547.png
 
 ## Data
-Data was obtained from the Consumer Financial Protection Bureau (CFPB) (http://www.consumerfinance.gov/).  The data available contains 596096 entries, with 18 individual features for each entry.  The entries of interest were the "Consumer complaint narrative", a block of text input by the consumer describing their issue.  The data set for this analysis was reduce to only contain entries with a complete "Consumer complaint narrative", leaving 84466 entries to work with.  
+Data was obtained from the Consumer Financial Protection Bureau (CFPB) (http://www.consumerfinance.gov/).  
+![picture](img/CPFB_Logo.svg)
+The data available contains 596096 entries, with 18 individual features for each entry.  The entries of interest were the "Consumer complaint narrative", a block of text input by the consumer describing their issue.  The data set for this analysis was reduce to only contain entries with a complete "Consumer complaint narrative", leaving 84466 entries to work with.  
 
 The data provided is anonomized with respect to customer names/account numbers/other personal information.  
 
