@@ -17,8 +17,8 @@ http://www.gimconsultancy.com/images/course/146760856426786695547.png
 
 ## Data
 Data was obtained from the Consumer Financial Protection Bureau (CFPB) (http://www.consumerfinance.gov/).  
-![picture](img/CPFB_Logo.png)
-The data available contains 596096 entries, with 18 individual features for each entry.  The entries of interest were the "Consumer complaint narrative", a block of text input by the consumer describing their issue.  The data set for this analysis was reduce to only contain entries with a complete "Consumer complaint narrative", leaving 84466 entries to work with.  
+![picture](img/CPFB_Lhttp://trainingcamp.seahawks.com/guidelines.htmlogo.png)
+The data available contains 596096 entries, with 18 individual features for each entry.  The entries of interest were the "Consumer complaint narrative", a block of text input by the consumer describing their issue.  The data set for this analysis was reduce to only contain entries with a complete "Consumer caomplaint narrative", leaving 84466 entries to work with.  
 
 The data provided is anonomized with respect to customer names/account numbers/other personal information.  
 
