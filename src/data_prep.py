@@ -12,6 +12,7 @@ create_numerical_features(df)
 """
 import pandas as pd
 import numpy as np
+from pyzipcode import ZipCodeDatabase
 
 def fill_missing_data(df):
     """
@@ -28,9 +29,9 @@ def fill_missing_data(df):
     df['Company public response'].fillna('Not Provided', inplace=True)
     df['Company'].fillna('Not Provided', inplace=True)
     # df['State'].fillna('Not Provided', inplace=True)
-    ## Modified by "zipcode_sorting.py"
+    ## Modified by "find_state_by_zip" function
     # df['ZIP code'].fillna('Not Provided', inplace=True)
-    ## Modified by "zipcode_sorting.py"
+    ## Modified by "find_state_by_zip" function
     df['Tags'].fillna('Not Provided', inplace=True)
     df['Consumer consent provided?'].fillna('Not Provided', inplace=True)
     df['Submitted via'].fillna('Not Provided',inplace=True)
@@ -106,5 +107,19 @@ def count_company_complaints(df):
     """
     count_company_complaints = df['Company'].value_counts()
     df['Count of Company Complaints'] = df['Company'].apply(lambda x: count_company_complaints[x])
+
+    return df
+
+def find_state_by_zip(df):
+    zipcode = ZipCodeDatabase
+    for item in df[pd.isnull(df['State']) & pd.notnull(df['ZIP code'])].index:
+    try:
+        df['State'][i] = str(zip[df['ZIP code'][i]].state)
+    except:
+        continue
+
+    #  Fill in empties that can't be filled with pyzipcode
+    df['State'].fillna('Not provided', inplace=True)
+    df['ZIP code'].fillna('Not provided', inplace=True)
 
     return df
