@@ -14,7 +14,8 @@ def create_df_no_text(df):
     INPUT - dataframe
     OUTPUT - 'df_no_text' dataframe for use in modeling non-text features
     """
-    print "Creating df_no_text for non-text feature modeling"
+    print "Creating df_no_text for non-text feature modeling...\n"
+    df_no_text = pd.DataFrame()
 
     df['Product'].fillna('Not Provided', inplace=True)
     df['Sub-product'].fillna('Not Provided', inplace=True)
@@ -50,7 +51,7 @@ def create_df_no_text(df):
 
     df_no_text['Company response to consumer'] = df['Company response to consumer'].apply(lambda x: cust_resp_dict[x])
 
-    print "Successfully created df_no_text for non-text feature modeling!!!"
+    print "Successfully created df_no_text for non-text feature modeling!!!\n"
 
     return df_no_text
 
@@ -65,7 +66,7 @@ def create_df_text(df):
     OUTPUT - 'df_text' dataframe for use in modeling text features
     """
 
-    print "Creating df_text for text feature modeling"
+    print "Creating df_text for text feature modeling...\n"
 
     df_text = pd.DataFrame()  # Create empty df to fill
 
@@ -80,14 +81,14 @@ def create_df_text(df):
 
     df_text['Company response to consumer'] = df['Company response to consumer'].apply(lambda x: cust_resp_dict[x])
 
-    print "Successfully created df_text for non-text feature modeling!!!"
+    print "Successfully created df_text for non-text feature modeling!!!\n"
 
     return df_text
 
-if __name__ == '__main__':
-    df = pd.read_csv('../data/Consumer_Complaints_with_Consumer_Complaint_Narratives.csv')
-    df_no_text = pd.DataFrame()
-    create_df_no_text(df)
-    # print create_df_no_text(df).head()
-    create_df_text(df)
-    # print create_df_text(df).head()
+# if __name__ == '__main__':
+#     df = pd.read_csv('../data/Consumer_Complaints_with_Consumer_Complaint_Narratives.csv')
+#     df_no_text = pd.DataFrame()
+#     create_df_no_text(df)
+#     # print create_df_no_text(df).head()
+#     create_df_text(df)
+#     # print create_df_text(df).head()
