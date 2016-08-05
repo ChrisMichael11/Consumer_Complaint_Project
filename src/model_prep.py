@@ -13,41 +13,46 @@ def prep_text_data_TFIDF(df):
     """
     Prep data for use in text analysis using TF-IDF
     """
-
+    print "Creating test/train data for TFIDF\n"
+    print df.head()
 
 
 
     # return X_train, X_test, y_train, y_test
-    print "AWESOME"
+    print "Test/Train data for TF-IDF has been created!!!\n"
 
 
 def prep_text_data_W2V(df):
     """
     Prep data for use in text analysis using Word2Vec
     """
+    print "Creating test/train data for Word2Vec\n"
 
 
 
 
     # return X_train, X_test, y_train, y_test
-    print "RADICAL"
+    print "Test/Train data for Word2Vec has been created!!!\n"
 
 def prep_non_text_data_RF(df):
     """
     Prep data for use in non-text analysis using OneVRest Classifier and Random Forest
     """
+    print "Creating test/train data for OneVRest Classifier\n"
 
 
 
     # return X_train, X_test, y_train, y_test
-    print "BODACIOUS"
+    print "Test/Train data for OneVRest Classifier has been created!!!\n"
 
 def prep_non_text_data_LR(df):
     """
     Prep data for use in non-text analysis using Logistic Regression
     """
+    print "Creating test/train data for Logistic Regression\n"
+
 
 
 
     # return X_train, X_test, y_train, y_test
-    print "TUBULAR"
+    print "Test/Train data for Logistic Regression has been created!!!\n"
