@@ -12,6 +12,8 @@ import numpy as np
 def prep_text_data_TFIDF(df):
     """
     Prep data for use in text analysis using TF-IDF
+    INPUT - df
+    OUTPUT - X_train, X_test, y_train, y_test
     """
     print "Creating test/train data for TFIDF\n"
     print df.head()
@@ -25,6 +27,8 @@ def prep_text_data_TFIDF(df):
 def prep_text_data_W2V(df):
     """
     Prep data for use in text analysis using Word2Vec
+    INPUT - df
+    OUTPUT - X_train, X_test, y_train, y_test
     """
     print "Creating test/train data for Word2Vec\n"
 
@@ -37,6 +41,8 @@ def prep_text_data_W2V(df):
 def prep_non_text_data_RF(df):
     """
     Prep data for use in non-text analysis using OneVRest Classifier and Random Forest
+    INPUT - df
+    OUTPUT - X_train, X_test, y_train, y_test
     """
     print "Creating test/train data for OneVRest Classifier\n"
 
@@ -48,6 +54,8 @@ def prep_non_text_data_RF(df):
 def prep_non_text_data_LR(df):
     """
     Prep data for use in non-text analysis using Logistic Regression
+    INPUT - df
+    OUTPUT - X_train, X_test, y_train, y_test
     """
     print "Creating test/train data for Logistic Regression\n"
 

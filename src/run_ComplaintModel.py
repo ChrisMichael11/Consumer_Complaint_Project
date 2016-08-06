@@ -2,8 +2,9 @@
 """
 Run this script with the following in the terminal:
 
-python run_ComplaintModel.py <'filename'>
-
+python run_ComplaintModel.py
+INPUT - 'python run_ComplaintModel.py
+OUTPUT - Model Results (figures, scores)
 """
 import numpy as np
 import pandas as pd
