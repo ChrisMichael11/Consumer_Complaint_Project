@@ -16,7 +16,7 @@ def prep_text_data_TFIDF(df):
     OUTPUT - X_train, X_test, y_train, y_test
     """
     print "Creating test/train data for TFIDF\n"
-    print df.head()
+    print "Peanut butter jelly time"
 
 
 
