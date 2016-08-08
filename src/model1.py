@@ -7,6 +7,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.cross_validation import train_test_split
 from sklearn.metrics import f1_score, accuracy_score, precision_score, \
     recall_score
+from sklearn.metrics import roc_curve, auc
 from sklearn.preprocessing import LabelEncoder
 import pandas as pd
 import numpy as np
@@ -14,11 +15,54 @@ import numpy as np
 from data_prep import create_df_text
 from model_prep import prep_text_data_TFIDF
 
+from imblearn.under_sampling import RandomUnderSampler
+import matplotlib.pyplot as plt
+
 def get_X_y(df):
     df = df
     X = df['Consumer complaint narrative'].tolist()
     y = df['Company response to consumer'].tolist()
+
+    print "distribution of labels:"
+    for i, count in enumerate(np.bincount(y)):
+        print "%d: %d" % (i, count)
+    # US = RandomUnderSampler()
+    # X, y = US.fit_sample(X.reshape(len(X),1), y.reshape(len(y),1))
+
     return X, y
+
+
+# def balanced_sample_maker(X, y, sample_size, random_seed=11):
+#     """ return a balanced data set by sampling all classes with sample_size
+#     current version is developed on assumption that the positive
+#     class is the minority.
+#
+#     Parameters:
+#     ===========
+#     X: {numpy.ndarrray}
+#     y: {numpy.ndarray}
+#     """
+#
+#     uniq_levels = np.unique(y)
+#     uniq_counts = {level: sum(y == level) for level in uniq_levels}
+#
+#     if not random_seed is None:
+#         np.random.seed(random_seed)
+#
+#     # find observation index of each class levels
+#     groupby_levels = {}
+#     for ii, level in enumerate(uniq_levels):
+#         obs_idx = [idx for idx, val in enumerate(y) if val == level]
+#         groupby_levels[level] = obs_idx
+#     # oversampling on observations of each label
+#     balanced_copy_idx = []
+#     for gb_level, gb_idx in groupby_levels.iteritems():
+#         over_sample_idx = np.random.choice(gb_idx, size=sample_size, replace=True).tolist()
+#         balanced_copy_idx+=over_sample_idx
+#     np.random.shuffle(balanced_copy_idx)
+#
+#     return (X[balanced_copy_idx, :], y[balanced_copy_idx], balanced_copy_idx)
+
 
 def lemmatize_descriptions(X):
     lem = WordNetLemmatizer()
@@ -30,46 +74,89 @@ def get_vectorizer(X, num_features=5000):
     vect = TfidfVectorizer(max_features=num_features, stop_words='english')
     return vect.fit(X)
 
-def compare_models(X, y, models):
-    desc_train, desc_test, y_train, y_test = train_test_split(X, y)
+# def compare_models(X, y, models):
+#     desc_train, desc_test, y_train, y_test = train_test_split(X, y,
+#                                                               test_size=0.3,
+#                                                               random_state=11)
+#
+#     US = RandomUnderSampler()
+#     desc_train, y_train = US.fit_sample(desc_train, y_train)
+
 
 def run_model(Model, X_train, X_test, y_train, y_test):
     m = Model()
     m.fit(X_train, y_train)
     y_predict = m.predict(X_test)
     return accuracy_score(y_test, y_predict), \
-        f1_score(y_test, y_predict, average='weighted'), \
-        precision_score(y_test, y_predict, average='weighted'), \
-        recall_score(y_test, y_predict, average='weighted')
+        f1_score(y_test, y_predict), \
+        precision_score(y_test, y_predict), \
+        recall_score(y_test, y_predict), \
+        roc_curve(y_test, y_predict)
+
+    # roc_curve(y_true, y_score, pos_label=None, sample_weight=None, drop_intermediate=True)
+
 
 
 
 def compare_models(descriptions, labels, models):
-    desc_train, desc_test, y_train, y_test = \
-        train_test_split(descriptions, labels)
+    desc_train, desc_test, y_train, y_test = train_test_split(descriptions,
+                                                              labels,
+                                                              test_size=0.3,
+                                                              random_state=11)
+
 
     print "-----------------------------"
     print "Without Lemmatization:"
     run_test(models, desc_train, desc_test, y_train, y_test)
 
     print "-----------------------------"
-    print "With Lemmatization:"
-    run_test(models, lemmatize_descriptions(desc_train),
-             lemmatize_descriptions(desc_test), y_train, y_test)
+    # print "With Lemmatization:"
+    # run_test(models, lemmatize_descriptions(desc_train),
+    #          lemmatize_descriptions(desc_test), y_train, y_test)
+    #
+    # print "-----------------------------"
 
-    print "-----------------------------"
-
+    # Lemmatization doesn't seem to have any appreciable effect.  Cut it out for speed
 
 def run_test(models, desc_train, desc_test, y_train, y_test):
     vect = get_vectorizer(desc_train)
     X_train = vect.transform(desc_train).toarray()
     X_test = vect.transform(desc_test).toarray()
 
-    print "acc\tf1\tprec\trecall"
+    print "acc\tf1(weighted)\tprec\trecall"
     for Model in models:
         name = Model.__name__
-        acc, f1, prec, rec = run_model(Model, X_train, X_test, y_train, y_test)
-        print "%.4f\t%.4f\t%.4f\t%.4f\t%s" % (acc, f1, prec, rec, name)
+        acc, f1, prec, rec, roc = run_model(Model, X_train, X_test, y_train, y_test)
+        print "%.4f\t%.4f\t\t%.4f\t%.4f\t%s" % (acc, f1, prec, rec, name)
+
+
+        # # Compute ROC curve and ROC area for each class
+        # fpr = dict()
+        # tpr = dict()
+        # roc_auc = dict()
+        # for i in range(3): #n_classes):
+        #     fpr[i], tpr[i], _ = roc_curve(y_test[:,i],y_predict[:,i],drop_intermediate=False)
+        #     roc_auc[i] = auc(fpr[i], tpr[i])
+        #
+        #
+        # fig = plt.figure(figsize=(10, 8))
+        #
+        # label = ['models']
+        # for i,v in enumerate(label):
+        #     plt.plot(fpr[i], tpr[i], label= v + ' (auc_area = {1:0.2f})'
+        #                                    ''.format(i, roc_auc[i]))
+        #
+        # plt.plot([0, 1], [0, 1], 'k--')
+        #
+        # plt.xlim([0.0, 1.0])
+        # plt.ylim([0.0, 1.05])
+        # plt.xlabel('False Positive Rate (1 - Specificity)')
+        # plt.ylabel('True Positive Rate (Sensitivity, Recall)')
+        # plt.title('ROC with non-text Features')
+        # plt.legend(loc="lower right")
+        #
+        #
+        # plt.show()
 
 
 if __name__ == '__main__':
@@ -77,6 +164,7 @@ if __name__ == '__main__':
     df = create_df_text(df)                      # For text data
     print df
     X, y = get_X_y(df)
+    # X , y = balanced_sample_maker(X, y, 2500)
     # print len(X)
     # print len(y)
 

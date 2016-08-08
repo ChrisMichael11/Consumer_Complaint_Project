@@ -75,9 +75,9 @@ def create_df_text(df):
     #  Create numerical values for 'Company response to consumer' and map to df
     cust_resp_dict ={'Closed':0,
                  'Untimely response':0,
-                 'Closed with explanation':1,
-                 'Closed with non-monetary relief':2,
-                 'Closed with monetary relief':2}
+                 'Closed with explanation':0,
+                 'Closed with non-monetary relief':1,
+                 'Closed with monetary relief':1}
 
     df_text['Company response to consumer'] = df['Company response to consumer'].apply(lambda x: cust_resp_dict[x])
     print "Successfully created df_text for non-text feature modeling!!!\n"
