@@ -7,10 +7,11 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.cross_validation import train_test_split
 from sklearn.metrics import f1_score, accuracy_score, precision_score, \
     recall_score
-from sklearn.metrics import roc_curve, auc
+from sklearn.metrics import roc_curve, auc, roc_auc_score
 from sklearn.preprocessing import LabelEncoder
 import pandas as pd
 import numpy as np
+import ggplot
 
 from data_prep import create_df_text
 from model_prep import prep_text_data_TFIDF
@@ -23,9 +24,9 @@ def get_X_y(df):
     X = df['Consumer complaint narrative'].tolist()
     y = df['Company response to consumer'].tolist()
 
-    print "distribution of labels:"
-    for i, count in enumerate(np.bincount(y)):
-        print "%d: %d" % (i, count)
+    # print "distribution of labels:"
+    # for i, count in enumerate(np.bincount(y)):
+    #     print "%d: %d" % (i, count)
     # US = RandomUnderSampler()
     # X, y = US.fit_sample(X.reshape(len(X),1), y.reshape(len(y),1))
 
@@ -87,16 +88,12 @@ def run_model(Model, X_train, X_test, y_train, y_test):
     m = Model()
     m.fit(X_train, y_train)
     y_predict = m.predict(X_test)
+    roc_curve(y_test, y_predict)
     return accuracy_score(y_test, y_predict), \
-        f1_score(y_test, y_predict), \
-        precision_score(y_test, y_predict), \
-        recall_score(y_test, y_predict), \
-        roc_curve(y_test, y_predict)
-
-    # roc_curve(y_true, y_score, pos_label=None, sample_weight=None, drop_intermediate=True)
-
-
-
+           f1_score(y_test, y_predict), \
+           precision_score(y_test, y_predict), \
+           recall_score(y_test, y_predict), \
+           roc_auc_score(y_test, y_predict)
 
 def compare_models(descriptions, labels, models):
     desc_train, desc_test, y_train, y_test = train_test_split(descriptions,
@@ -105,43 +102,42 @@ def compare_models(descriptions, labels, models):
                                                               random_state=11)
 
 
-    print "-----------------------------"
-    print "Without Lemmatization:"
-    run_test(models, desc_train, desc_test, y_train, y_test)
-
-    print "-----------------------------"
-    # print "With Lemmatization:"
-    # run_test(models, lemmatize_descriptions(desc_train),
-    #          lemmatize_descriptions(desc_test), y_train, y_test)
-    #
     # print "-----------------------------"
+    # print "Without Lemmatization:"
+    # run_test(models, desc_train, desc_test, y_train, y_test)
 
-    # Lemmatization doesn't seem to have any appreciable effect.  Cut it out for speed
+    print "-----------------------------"
+    print "With Lemmatization:"
+    run_test(models, lemmatize_descriptions(desc_train),
+             lemmatize_descriptions(desc_test), y_train, y_test)
+
+    print "-----------------------------"
+
+    # Lemmatization doesn't seem to have any appreciable effect.
 
 def run_test(models, desc_train, desc_test, y_train, y_test):
     vect = get_vectorizer(desc_train)
     X_train = vect.transform(desc_train).toarray()
     X_test = vect.transform(desc_test).toarray()
 
-    print "acc\tf1(weighted)\tprec\trecall"
+    print "acc\tf1(weighted)\tprec\trecall\tAUC_score"
     for Model in models:
         name = Model.__name__
         acc, f1, prec, rec, roc = run_model(Model, X_train, X_test, y_train, y_test)
-        print "%.4f\t%.4f\t\t%.4f\t%.4f\t%s" % (acc, f1, prec, rec, name)
+        print "%.4f\t%.4f\t\t%.4f\t%.4f\t%.4f\t%s" % (acc, f1, prec, rec, roc, name)
 
 
-        # # Compute ROC curve and ROC area for each class
+        # # ROC Curve
         # fpr = dict()
         # tpr = dict()
         # roc_auc = dict()
-        # for i in range(3): #n_classes):
-        #     fpr[i], tpr[i], _ = roc_curve(y_test[:,i],y_predict[:,i],drop_intermediate=False)
+        # for i in range(len(models)):
+        #     fpr[i], tpr[i], _ = roc_curve(y_test[:, i],y_predict[:, i],drop_intermediate=False)
         #     roc_auc[i] = auc(fpr[i], tpr[i])
-        #
         #
         # fig = plt.figure(figsize=(10, 8))
         #
-        # label = ['models']
+        # label = ['Closed w/o Relief', 'Closed w/relief']  #'Closed w/explaination',
         # for i,v in enumerate(label):
         #     plt.plot(fpr[i], tpr[i], label= v + ' (auc_area = {1:0.2f})'
         #                                    ''.format(i, roc_auc[i]))
@@ -159,10 +155,12 @@ def run_test(models, desc_train, desc_test, y_train, y_test):
         # plt.show()
 
 
+
+
 if __name__ == '__main__':
     df = pd.read_csv('../data/Consumer_Complaints_with_Consumer_Complaint_Narratives.csv')
     df = create_df_text(df)                      # For text data
-    print df
+    print df.head()
     X, y = get_X_y(df)
     # X , y = balanced_sample_maker(X, y, 2500)
     # print len(X)
