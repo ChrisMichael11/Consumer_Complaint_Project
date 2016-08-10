@@ -82,7 +82,7 @@ def create_df_text(df):
     df_text['Company response to consumer'] = df['Company response to consumer'].apply(lambda x: cust_resp_dict[x])
     print "Successfully created df_text for non-text feature modeling!!!\n"
 
-    return df_text #[1:2001]
+    return df_text[1:20001]
 
 # if __name__ == '__main__':
 #     df = pd.read_csv('../data/Consumer_Complaints_with_Consumer_Complaint_Narratives.csv')
