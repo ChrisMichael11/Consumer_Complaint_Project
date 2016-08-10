@@ -31,7 +31,7 @@ def get_X_y(df):
 
     return X, y
 
-def get_vectorizer(X, num_features=5000):
+def get_vectorizer(X, num_features=2500):
     """
     Vectorize text
     """
@@ -39,6 +39,11 @@ def get_vectorizer(X, num_features=5000):
     return vect.fit(X)
 
 def run_model(Model, X_train, X_test, y_train, y_test):
+    """
+    Run each model, produce scores and other data
+    INPUT - model name, train/test data
+    OUTPUT - accuracy, F1, precision, recall, AUC, predict_probs (for ROC plotting)
+    """
     m = Model()
     m.fit(X_train, y_train)
     y_predict = m.predict(X_test)
@@ -54,8 +59,10 @@ def run_model(Model, X_train, X_test, y_train, y_test):
 
 def compare_models(descriptions, labels, models):
     """
-    Run models, produce scores (Accuracy, precision, recall, F1, AUC) and
-    plot ROC Curve
+    Run models (with run_model function), produce scores (Accuracy, precision, recall, F1, AUC) and
+    plot ROC Curve.
+
+    Function produces train/test split data.  Test size and random state set for repeatability
     """
     desc_train, desc_test, y_train, y_test = train_test_split(descriptions,
                                                               labels,
