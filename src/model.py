@@ -31,7 +31,7 @@ def get_X_y(df):
 
     return X, y
 
-def get_vectorizer(X, num_features=2500):
+def get_vectorizer(X, num_features=1000):
     """
     Vectorize text
     """

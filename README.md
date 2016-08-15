@@ -26,7 +26,7 @@ The data available contains 596096 entries, with 18 individual features for each
 
 The data provided is anonomized with respect to customer names/account numbers/other personal information.  
 
-The data contains the "target" label for the analysis in the "Company response to consumer" column.  This column was converted to a two category list for classification:
+The data contains the "target" label for the analysis in the "Company response to consumer" column.  The data is imbalanced (80/20).  This is addressed using undersampling libraries in SKLearn.  
 
 The following scheme was used for classification:
 
@@ -52,19 +52,23 @@ The model was run as a sanity check and is not expected to be used in any analys
 ## Results and Recommendations
 #### Results
 MODELING RESULTS USING NO TEXT FEATURES:
-
+An accuracy of ~53% was obtained.
 
 MODELING RESULTS USING TEXT FEATURES:
 ![picture](img/ROC_Text_20Kfeats.png)
 
+![picture](img/Results.png)
+
+
 #### Recommendations
 Predicting the outcome of a complaint will provide a business with the ability to:
-- Position resources to properly address claim  
-- Manage costs
+- Position resources to properly address claim and provide better customer serivice  
+- Manage costs by understanding what products are and are not working from a customer point of view
+- Find ways to exploit areas of the business where fee based schemes could be used to bring in more revenue to the company
 
 
 ## Follow-on Activities
 1. Investigate makeup of classified groups - What similarities do these groups have?
-2. Does length of time of the claim (i.e. processing time) have an effect on relief?
+2. Predict length of time of the claim (i.e. processing time) and investigate if length has an effect on relief?
 3. Apply NLP to "Company response to consumer" column
 4. Run Word2Vec on model
