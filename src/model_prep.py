@@ -18,8 +18,6 @@ def prep_text_data_TFIDF(df):
     print "Creating test/train data for TFIDF\n"
     print "Peanut butter jelly time"
 
-
-
     # return X_train, X_test, y_train, y_test
     print "Test/Train data for TF-IDF has been created!!!\n"
 
@@ -32,9 +30,6 @@ def prep_text_data_W2V(df):
     """
     print "Creating test/train data for Word2Vec\n"
 
-
-
-
     # return X_train, X_test, y_train, y_test
     print "Test/Train data for Word2Vec has been created!!!\n"
 
@@ -46,8 +41,6 @@ def prep_non_text_data_RF(df):
     """
     print "Creating test/train data for OneVRest Classifier\n"
 
-
-
     # return X_train, X_test, y_train, y_test
     print "Test/Train data for OneVRest Classifier has been created!!!\n"
 
@@ -58,9 +51,6 @@ def prep_non_text_data_LR(df):
     OUTPUT - X_train, X_test, y_train, y_test
     """
     print "Creating test/train data for Logistic Regression\n"
-
-
-
 
     # return X_train, X_test, y_train, y_test
     print "Test/Train data for Logistic Regression has been created!!!\n"
